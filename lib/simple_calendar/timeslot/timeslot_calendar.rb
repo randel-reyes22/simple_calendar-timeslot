@@ -92,7 +92,7 @@ module SimpleCalendar
       def event_top_distance(event, day)
         return 0 if event.send(attribute).to_date != day
         #(event.send(attribute).hour - TimeslotCalendar::FIRST_HOUR_SLOT) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
-        event.send(attribute).hour * 60 * px_per_minute + event.send(attribute).min * px_per_minute
+        (event.send(attribute).hour - start_hour) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
       end
 
       def split_into_buckets(events)
@@ -148,11 +148,11 @@ module SimpleCalendar
       end
 
       def start_hour
-        @options.fetch(:start_hour, 0).to_i
+        @options.fetch(:start_hour, 8).to_i
       end
 
       def end_hour
-        @options.fetch(:end_hour, 23).to_i
+        @options.fetch(:end_hour, 17).to_i
       end
 
       private
