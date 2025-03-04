@@ -52,10 +52,10 @@
             <% (calendar.start_hour..calendar.end_hour).each do |hour| %>
               <% formatted_hour = Time.parse("#{hour}:00").strftime("%l %p").strip %>
               <% if calendar.layout == :vertical %>
-              <div class="hour-indicator-cell tscal-vertical tscal-hour-cell" id="hour-<%=hour %>">
+              <div class="hour-indicator-cell tscal-vertical tscal-hour-cell" id="hour-<%=formatted_hour %>">
                 <div class="hour-indicator" style="width:<%=calendar.grid_width%>">
               <% else %>
-              <div class="hour-indicator-cell tscal-horizontal tscal-hour-cell" id="hour-<%=hour %>">
+              <div class="hour-indicator-cell tscal-horizontal tscal-hour-cell" id="hour-<%=formatted_hour %>">
                 <div class="hour-indicator" style="height:<%=calendar.grid_width%>">
               <% end %>
                   <%= formatted_hour %>
@@ -137,13 +137,19 @@
             <div class="day-body <%=calendar.td_classes_for(date_range[index]).join(' ')%>" style="width:<%=calendar.day_size%>px;height:<%=calendar.day_height_px%>px">
               <% if calendar.display_grid %>
               <div class="hour-indicator-wrapper">
-              <% (0..23).each do |hour| %>
-                <div class="hour-indicator-cell tscal-horizontal tscal-hour-cell" id="hour-<%=hour %>">
-                  <div class="hour-indicator" style="height:<%=calendar.grid_width%>">
-                    <%=hour%>
+                <% (calendar.start_hour..calendar.end_hour).each do |hour| %>
+                  <% formatted_hour = Time.parse("#{hour}:00").strftime("%l %p").strip %>
+                  <% if calendar.layout == :vertical %>
+                  <div class="hour-indicator-cell tscal-vertical tscal-hour-cell" id="hour-<%=formatted_hour %>">
+                    <div class="hour-indicator" style="width:<%=calendar.grid_width%>">
+                  <% else %>
+                  <div class="hour-indicator-cell tscal-horizontal tscal-hour-cell" id="hour-<%=formatted_hour %>">
+                    <div class="hour-indicator" style="height:<%=calendar.grid_width%>">
+                  <% end %>
+                      <%= formatted_hour %>
+                    </div>
                   </div>
-                </div>
-              <% end %>
+                <% end %>
               </div>
               <% end %>
               <% if calendar.display_current_time_indicator %>

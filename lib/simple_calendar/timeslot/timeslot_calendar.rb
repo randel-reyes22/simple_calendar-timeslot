@@ -75,7 +75,7 @@ module SimpleCalendar
       end
 
       def day_size
-        24 * 60 * px_per_minute
+        (end_hour - start_hour) * 60 * px_per_minute
       end
 
       def event_height(event, day)
