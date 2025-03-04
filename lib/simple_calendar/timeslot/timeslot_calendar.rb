@@ -78,21 +78,40 @@ module SimpleCalendar
         (end_hour - start_hour) * 60 * px_per_minute
       end
 
+      # def event_height(event, day)
+      #   minutes = if event.send(attribute).to_date != day
+      #               (event.send(end_attribute) - event.send(end_attribute).midnight)/60
+      #             elsif event.send(attribute).to_date < event.send(end_attribute).to_date
+      #               (event.send(end_attribute).midnight - 60 - event.send(attribute))/60
+      #             else
+      #               (event.send(end_attribute) - event.send(attribute))/60
+      #             end
+      #   minutes * px_per_minute 
+      # end
+
       def event_height(event, day)
-        minutes = if event.send(attribute).to_date != day
-                    (event.send(end_attribute) - event.send(end_attribute).midnight)/60
-                  elsif event.send(attribute).to_date < event.send(end_attribute).to_date
-                    (event.send(end_attribute).midnight - 60 - event.send(attribute))/60
+        event_start = [event.send(attribute), Time.zone.parse("#{day} #{start_hour}:00")].max
+        event_end = [event.send(end_attribute), Time.zone.parse("#{day} #{end_hour}:00")].min
+        minutes = if event_start.to_date != day
+                    (event_end - event_end.midnight) / 60
+                  elsif event_start.to_date < event_end.to_date
+                    (event_end.midnight - 60 - event_start) / 60
                   else
-                    (event.send(end_attribute) - event.send(attribute))/60
+                    (event_end - event_start) / 60
                   end
-        minutes * px_per_minute 
+        minutes * px_per_minute
       end
+
+      # def event_top_distance(event, day)
+      #   return 0 if event.send(attribute).to_date != day
+      #   #(event.send(attribute).hour - TimeslotCalendar::FIRST_HOUR_SLOT) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
+      #   (event.send(attribute).hour - start_hour) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
+      # end
 
       def event_top_distance(event, day)
         return 0 if event.send(attribute).to_date != day
-        #(event.send(attribute).hour - TimeslotCalendar::FIRST_HOUR_SLOT) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
-        (event.send(attribute).hour - start_hour) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
+        event_start = [event.send(attribute), Time.zone.parse("#{day} #{start_hour}:00")].max
+        (event_start.hour - start_hour) * 60 * px_per_minute + event_start.min * px_per_minute
       end
 
       def split_into_buckets(events)
