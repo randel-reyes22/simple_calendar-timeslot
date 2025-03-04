@@ -92,13 +92,7 @@ module SimpleCalendar
       def event_height(event, day)
         event_start = [event.send(attribute), Time.zone.parse("#{day} #{start_hour}:00")].max
         event_end = [event.send(end_attribute), Time.zone.parse("#{day} #{end_hour}:00")].min
-        minutes = if event_start.to_date != day
-                    (event_end - event_end.midnight) / 60
-                  elsif event_start.to_date < event_end.to_date
-                    (event_end.midnight - 60 - event_start) / 60
-                  else
-                    (event_end - event_start) / 60
-                  end
+        minutes = (event_end - event_start) / 60
         minutes * px_per_minute
       end
 
