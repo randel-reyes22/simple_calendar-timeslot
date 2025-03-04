@@ -147,6 +147,14 @@ module SimpleCalendar
         offset
       end
 
+      def start_hour
+        @options.fetch(:start_hour, 0).to_i
+      end
+
+      def end_hour
+        @options.fetch(:end_hour, 23).to_i
+      end
+
       private
 
       def pack_events(r, columns)
