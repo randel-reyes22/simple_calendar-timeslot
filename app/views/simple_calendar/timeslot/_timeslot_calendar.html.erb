@@ -49,7 +49,7 @@
         <% end %>
           <% if calendar.display_grid %>
           <div class="hour-indicator-wrapper">
-          <% (0..23).each do |hour| %>
+          <% (calendar.start_hour..calendar.end_hour).each do |hour| %>
             <% if calendar.layout == :vertical %>
             <div class="hour-indicator-cell tscal-vertical tscal-hour-cell" id="hour-<%=hour %>">
               <div class="hour-indicator" style="width:<%=calendar.grid_width%>">
