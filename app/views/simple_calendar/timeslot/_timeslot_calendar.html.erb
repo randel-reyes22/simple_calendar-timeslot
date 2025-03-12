@@ -49,7 +49,7 @@
         <% end %>
           <% if calendar.display_grid %>
           <div class="hour-indicator-wrapper">
-          <% (0..23).each do |hour| %>
+          <% (start_hour..end_hour).each do |hour| %>
             <% if calendar.layout == :vertical %>
             <div class="hour-indicator-cell tscal-vertical tscal-hour-cell" id="hour-<%=hour %>">
               <div class="hour-indicator" style="width:<%=calendar.grid_width%>">
@@ -136,7 +136,7 @@
             <div class="day-body <%=calendar.td_classes_for(date_range[index]).join(' ')%>" style="width:<%=calendar.day_size%>px;height:<%=calendar.day_height_px%>px">
               <% if calendar.display_grid %>
               <div class="hour-indicator-wrapper">
-              <% (0..23).each do |hour| %>
+              <% (start_hour..end_hour).each do |hour| %>
                 <div class="hour-indicator-cell tscal-horizontal tscal-hour-cell" id="hour-<%=hour %>">
                   <div class="hour-indicator" style="height:<%=calendar.grid_width%>">
                     <%=hour%>

@@ -4,6 +4,20 @@ module SimpleCalendar
   module Timeslot    
     class TimeslotCalendar < SimpleCalendar::Calendar
 
+      # added code starts here 
+      def start_hour
+        @options.fetch(:start_hour, 8)
+      end
+
+      def end_hour
+        @options.fetch(:end_hour, 16)
+      end
+
+      def total_minutes
+        (end_hour - start_hour) * 60
+      end
+      # added code ends here 
+
       def layout
         @options.fetch(:layout, :vertical)
       end
@@ -75,7 +89,7 @@ module SimpleCalendar
       end
 
       def day_size
-        24 * 60 * px_per_minute
+        total_minutes * px_per_minute
       end
 
       def event_height(event, day)
@@ -91,8 +105,10 @@ module SimpleCalendar
 
       def event_top_distance(event, day)
         return 0 if event.send(attribute).to_date != day
-        #(event.send(attribute).hour - TimeslotCalendar::FIRST_HOUR_SLOT) * 60 * px_per_minute + event.send(attribute).min * px_per_minute
-        event.send(attribute).hour * 60 * px_per_minute + event.send(attribute).min * px_per_minute
+        
+        event_time = event.send(attribute)
+        minutes_from_start = (event_time.hour * 60 + event_time.min) - (start_hour * 60)
+        minutes_from_start * px_per_minute
       end
 
       def split_into_buckets(events)
@@ -143,8 +159,10 @@ module SimpleCalendar
 
       def current_time_offset
         now = Time.zone.now
-        offset = (now.hour * 60 + now.min) * px_per_minute
-        offset
+        return 0 if now.hour < start_hour || now.hour >= end_hour
+
+        minutes_from_start = (now.hour * 60 + now.min) - (start_hour * 60)
+        minutes_from_start * px_per_minute
       end
 
       private
